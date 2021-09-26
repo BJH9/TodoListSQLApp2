@@ -132,6 +132,26 @@ public class TodoUtil {
 		System.out.println("전체목록, 총" + count + "개");
 	}
 	
+	public static void findKeyword(TodoList l) {
+		Scanner sc = new Scanner(System.in);
+		int count = 0;
+		
+		System.out.print("찾고자 하는 keyword를 입력하세요: ");
+		String keyword = sc.next();
+		
+		for(TodoItem item : l.getList()) {
+			if((item.getTitle().contains(keyword)) || (item.getDesc().contains(keyword))) {
+				TodoItem t = new TodoItem(item.getTitle(), item.getDesc(), item.getCategory(), item.getDue_date());
+				l.addItem2(t);
+				count++;
+				item.setOrder(count);
+				System.out.println(count + ". [" + item.getCategory() + "]" + "  " + item.getTitle() + " - " + item.getDesc() + " - " + item.getDue_date() + " 까지 ");
+			}
+		}
+		
+		
+	}
+	
 	public static void saveList(TodoList i, String filename) {
 		System.out.println("정보를 저장합니다.");
 		try {

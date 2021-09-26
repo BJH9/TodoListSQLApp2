@@ -7,13 +7,19 @@ import com.todo.service.TodoSortByName;
 
 public class TodoList {
 	private List<TodoItem> list;
+	private List<TodoItem> list2;
 
 	public TodoList() {
 		this.list = new ArrayList<TodoItem>();
+		this.list2 = new ArrayList<TodoItem>();
 	}
 
 	public void addItem(TodoItem t) {
 		list.add(t);
+	}
+	
+	public void addItem2(TodoItem t) {
+		list2.add(t);
 	}
 
 	public void deleteItem(TodoItem t) {
@@ -28,6 +34,10 @@ public class TodoList {
 
 	public ArrayList<TodoItem> getList() {
 		return new ArrayList<TodoItem>(list);
+	}
+	
+	public ArrayList<TodoItem> getList2() {
+		return new ArrayList<TodoItem>(list2);
 	}
 
 	public void sortByName() {

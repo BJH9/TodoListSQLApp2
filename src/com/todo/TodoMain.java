@@ -40,6 +40,11 @@ public class TodoMain {
 				System.out.println("-ls를 입력했습니다. ");
 				TodoUtil.listAll(l);
 				break;
+				
+			case "find":
+				System.out.println("-find를 입력했습니다. ");
+				TodoUtil.findKeyword(l);
+				break;
 
 			case "ls_name_asc":
 				System.out.println("-ls_name_asc를 입력했습니다. ");

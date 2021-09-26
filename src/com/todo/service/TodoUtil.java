@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.*;
@@ -14,10 +15,12 @@ import com.todo.dao.TodoList;
 
 public class TodoUtil {
 	
+	
 	public static void createItem(TodoList list) {
 		
-		String title, desc, category;
+		String title, desc, category, due_date;
 		Scanner sc = new Scanner(System.in);
+		
 		
 		System.out.println("\n"
 				+ "========== (Add)아이템을 선택하세요. \n"
@@ -34,6 +37,7 @@ public class TodoUtil {
 		
 		System.out.println("$카테고리를 입력하세요.");
 		category = sc.next();
+		System.out.println("-카테고리가 추가되었습니다.");
 		
 		System.out.println("");
 		System.out.println("$discription을 추가하세요.");
@@ -41,29 +45,34 @@ public class TodoUtil {
 		System.out.println("");
 		sc.nextLine();
 		desc = sc.nextLine();
-		System.out.println("-아이템의 discription이 등록되었습니다. ");
-		TodoItem t = new TodoItem(title, desc, category);
+		System.out.println("-아이템의 discription이 등록되었습니다.");
+		
+		System.out.println("due date를 입력하세요.");
+		due_date = sc.nextLine();
+		System.out.println("due date가 추가되었습니다");
+		
+		TodoItem t = new TodoItem(title, desc, category, due_date);
 		list.addItem(t);
 	}
 
 	public static void deleteItem(TodoList l) {
 		
 		System.out.println("\n"
-				+ "========== (Delete)아이템을 선택하세요. \n"
-				+ "\n");
+				+ "========== (Delete)아이템을 선택하세요. \n");
 		
-		System.out.println("삭제할 아이템의 이름을 입력하세요. ");
+		System.out.println("삭제할 아이템의 번호를 입력하세요. ");
 		Scanner sc = new Scanner(System.in);
-		String title = sc.next();
+		int order = sc.nextInt();
 		
 		for (TodoItem item : l.getList()) {
-			if (title.equals(item.getTitle())) {
-				l.deleteItem(item);
-				System.out.println("-"+ title + " 아이템이 삭제되었습니다.  ");
-				break;
+				if (order == item.getOrder()) {
+					l.deleteItem(item);
+					System.out.println("-"+ item.getTitle() + " 아이템이 삭제되었습니다.  ");
+					break;
+				}
 			}
 		}
-	}
+	
 
 
 	public static void updateItem(TodoList l) {
@@ -72,15 +81,12 @@ public class TodoUtil {
 		
 		System.out.println("\n"
 				+ "========== (Edit) 아이템을 선택하세요. \n"
-				+ "$업데이트할 아이템의 이름을 입력하세요. \n"
+				+ "$업데이트할 아이템의 번호를 입력하세요. \n"
 				+ "\n");
 		
-		String title = sc.next().trim();
-		if (!l.isDuplicate(title)) {
-			System.out.println("**존재하지 않는 아이템입니다. ");
-			return;
-		}
-		System.out.println("-이름을 입력받았습니다. ");
+		int order = sc.nextInt();
+		
+		System.out.println("-번호를 입력받았습니다. ");
 
 		System.out.println("$새로운 아이템의 이름을 입력하세요. ");
 		
@@ -98,10 +104,14 @@ public class TodoUtil {
 		System.out.println("");
 		sc.nextLine();
 		String new_description = sc.nextLine().trim();
+		
+		System.out.println("$새로운 due_date를 입력하세요.");
+		String new_due_date = sc.nextLine();
+		
 		for (TodoItem item : l.getList()) {
-			if (item.getTitle().equals(title)) {
+			if (item.getOrder() == order) {
 				l.deleteItem(item);
-				TodoItem t = new TodoItem(new_title, new_description, new_category);
+				TodoItem t = new TodoItem(new_title, new_description, new_category, new_due_date);
 				l.addItem(t);
 				System.out.println("-아이템이 업데이트 되었습니다.");
 			}
@@ -111,9 +121,13 @@ public class TodoUtil {
 
 	public static void listAll(TodoList l) {
 		int count = 0;
+		for(int i = 0; i < 100; i++) {
+		
+		}
 		for (TodoItem item : l.getList()) {
 			count++;
-			System.out.println("[" + item.getCategory() + "]" + "  " + item.getTitle() + " - " + item.getDesc());
+			item.setOrder(count);
+			System.out.println(count + ". [" + item.getCategory() + "]" + "  " + item.getTitle() + " - " + item.getDesc() + " - " + item.getDue_date() + " 까지 ");
 		}
 		System.out.println("전체목록, 총" + count + "개");
 	}
@@ -142,10 +156,12 @@ public class TodoUtil {
 		String title;
 		String desc;
 		String category;
+		String due_date;
 		String current_date;
 		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filename));
+			LineNumberReader lr = new LineNumberReader(br);
 			String line;
 			int count = 0;
 			while((line = br.readLine()) != null) {
@@ -153,9 +169,11 @@ public class TodoUtil {
 				category = st.nextToken();
 				title = st.nextToken();
 				desc = st.nextToken();
+				due_date = st.nextToken();
 				current_date = st.nextToken();
-				TodoItem item = new TodoItem(title, desc, category);
+				TodoItem item = new TodoItem(title, desc, category, due_date);
 				item.setCurrent_date(current_date);
+				item.setOrder(lr.getLineNumber());
 				i.addItem(item);
 				count++;
 				

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 
 public class TodoItem {
     private String title;
+    private int id;
     private String desc;
     private String current_date;
     private String category;
@@ -58,6 +59,14 @@ public class TodoItem {
     public void setTitle(String title) {
         this.title = title;
     }
+    
+    public int getId() {
+    	return id;
+    }
+    
+    public void setId(int id) {
+    	this.id = id;
+    }
 
     public String getDesc() {
         return desc;
@@ -80,6 +89,14 @@ public class TodoItem {
     	return category + "##" + title + "##" + desc + "##" + due_date + "##" + current_date + "\n";
     }
     
-    
+    @Override
+    public String toString() {
+    	String list;
+    	list = id + " [" + category + "] " + title + " : " + desc + " : " 
+    	+ due_date + "까지" + " : " + current_date;
+    	
+    	return list;
+    	
+    }
     
 }
